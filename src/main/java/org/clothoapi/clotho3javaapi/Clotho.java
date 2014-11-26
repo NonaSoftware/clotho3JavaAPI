@@ -9,6 +9,7 @@ package org.clothoapi.clotho3javaapi;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -46,7 +47,7 @@ public class Clotho implements MessageListener
     {
         String reqId = "";
         reqId += System.currentTimeMillis();
-        System.out.println("Generated Req ID :" + reqId);
+        //System.out.println("Generated Req ID :" + reqId);
         return reqId;
     }
     
@@ -62,19 +63,19 @@ public class Clotho implements MessageListener
         
         try {
             StringWriter mapStringWriter = new StringWriter();
-        JSONValue.writeJSONString(map, mapStringWriter);
-        String mapText = mapStringWriter.toString();
-        //System.out.println(jsonText);
-        Map queryMap = new HashMap();
-        queryMap.put("channel",channel.toString());
-        queryMap.put("data",map);
-        queryMap.put("requestId",getRequestId());
-        
-        StringWriter queryStringWriter = new StringWriter();
-        JSONValue.writeJSONString(queryMap, queryStringWriter);
-        String queryString = queryStringWriter.toString();
+            JSONValue.writeJSONString(map, mapStringWriter);
+            String mapText = mapStringWriter.toString();
+            //System.out.println(jsonText);
+            Map queryMap = new HashMap();
+            queryMap.put("channel", channel.toString());
+            queryMap.put("data", map);
+            queryMap.put("requestId", getRequestId());
+
+            StringWriter queryStringWriter = new StringWriter();
+            JSONValue.writeJSONString(queryMap, queryStringWriter);
+            String queryString = queryStringWriter.toString();
             long startTime = System.currentTimeMillis();
-            long elapsedTime =0;
+            long elapsedTime = 0;
             connection.sendMessage(queryString);
             while((!received) && (elapsedTime <10))
             {
@@ -100,6 +101,7 @@ public class Clotho implements MessageListener
     public void messageRecieved(OnMessageEvent event) 
     {
         String message = event.getMessage();
+        String nullString = null;
         System.out.println("This is a message :" + message);
         //System.out.println("Got a result : " + event.getMessage());
         //System.out.println("Got a result : "+message);
@@ -108,25 +110,31 @@ public class Clotho implements MessageListener
         {
             if(messageObject.get("channel").equals("say"))
             {
-                //System.out.println("Data : \n"+messageObject.get("data"));
+                
                 JSONObject dataObject = JSONObject.fromObject(messageObject.get("data"));
-                if(dataObject.get("text") == null)
+                
+                System.out.println("Class : "+dataObject.get("class"));
+                System.out.println("TimeStamp : "+dataObject.get("timestamp"));
+                System.out.println("Text : "+dataObject.get("text"));
+                
+                if(dataObject.get("text").equals(nullString))
                 {
                     System.out.println("No results found!");
                     received = true;
                     receivedObject = messageObject.get("data");
+                    
                 }
                 else
                 {
                     System.out.println(dataObject.get("text"));
                 }
             }
-            if(messageObject.get("channel").equals("queryOne"))
+            if(messageObject.get("channel").equals(this.channel.toString()))
             {
                 receivedObject = messageObject.get("data");
                 received = true;
             }
-            System.out.println("Message Channel : " + messageObject.get("channel"));
+            //System.out.println("Message Channel : " + messageObject.get("channel"));
         }
         catch(Exception e)
         {

@@ -5,16 +5,8 @@
  */
 package org.clothoapi.clotho3javaapi;
 
-import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.eclipse.jetty.websocket.WebSocket;
-import org.eclipse.jetty.websocket.WebSocketClient;
-import org.eclipse.jetty.websocket.WebSocketClientFactory;
 
 /**
  *
