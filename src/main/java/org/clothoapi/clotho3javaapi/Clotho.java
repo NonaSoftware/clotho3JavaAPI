@@ -7,11 +7,15 @@
 package org.clothoapi.clotho3javaapi;
 
 import java.io.IOException;
+import java.io.StringWriter;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONObject;
 import org.eclipse.jetty.websocket.WebSocket;
+import org.json.simple.JSONValue;
 
 /**
  *
@@ -38,17 +42,50 @@ public class Clotho implements MessageListener
         clothoConn.clothoSocket.addMessageListener(this);
     }
     
-    public static Object query(String queryString)
+    private static String getRequestId()
     {
+        String reqId = "";
+        reqId += System.currentTimeMillis();
+        System.out.println("Generated Req ID :" + reqId);
+        return reqId;
+    }
+    
+    public static Object query(Map map) 
+    {
+        getRequestId();
         channel = Channel.queryOne;
         received = false;
         
+        
+        
+        //System.out.println("Query String is : "+queryString);
+        
         try {
+            StringWriter mapStringWriter = new StringWriter();
+        JSONValue.writeJSONString(map, mapStringWriter);
+        String mapText = mapStringWriter.toString();
+        //System.out.println(jsonText);
+        Map queryMap = new HashMap();
+        queryMap.put("channel",channel.toString());
+        queryMap.put("data",map);
+        queryMap.put("requestId",getRequestId());
+        
+        StringWriter queryStringWriter = new StringWriter();
+        JSONValue.writeJSONString(queryMap, queryStringWriter);
+        String queryString = queryStringWriter.toString();
+            long startTime = System.currentTimeMillis();
+            long elapsedTime =0;
             connection.sendMessage(queryString);
-            while(!received)
+            while((!received) && (elapsedTime <10))
             {
-                System.out.println("Waiting");
+                System.out.print("");
+                elapsedTime = (System.currentTimeMillis() - startTime)/1000;
             }
+            if(elapsedTime >= 10)
+            {
+                System.out.println("System time out. Please check your Clotho Connection");
+            }
+            //System.out.println("System took : " + elapsedTime + " seconds to return a result");
             received = false;
             return receivedObject;
             

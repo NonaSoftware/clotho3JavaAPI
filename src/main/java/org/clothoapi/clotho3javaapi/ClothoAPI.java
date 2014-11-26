@@ -6,6 +6,8 @@
 package org.clothoapi.clotho3javaapi;
 
 import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -29,7 +31,11 @@ public class ClothoAPI {
         Clotho clothoObject = new Clotho(conn);
         
         String jsonQuery = "{\"channel\":\"queryOne\",\"data\":{\"name\":\"newPart\"},\"requestId\":3}";
-        Object ret = clothoObject.query(jsonQuery);
+        
+        Map map = new HashMap();
+        map.put("name","newPart");
+        
+        Object ret = clothoObject.query(map);
         
         System.out.println("The result is " + ret);
         
