@@ -20,30 +20,38 @@ import org.eclipse.jetty.websocket.WebSocketClientFactory;
  */
 public class ClothoAPI {
 
-    private static WebSocket.Connection serverConnection;
+    //private static WebSocket.Connection serverConnection;
 
     public static void main(String[] args) {
-
+        
+        
+        ClothoConnection conn = new ClothoConnection("wss://localhost:8443/websocket");
+        Clotho clothoObject = new Clotho(conn);
+        
+        String jsonQuery = "{\"channel\":\"queryOne\",\"data\":{\"name\":\"newPart\"},\"requestId\":3}";
+        Object ret = clothoObject.query(jsonQuery);
+        
+        System.out.println("The result is " + ret);
+        
+        conn.closeConnection();
+        
+        //<editor-fold desc="Old code. Back up">
+        /*
         Clotho conn = new Clotho();
 
         String clothoURI = "wss://localhost:8443/websocket";
         WebSocketClientFactory factory = new WebSocketClientFactory();
         ClothoWebSocket clothoSocket = new ClothoWebSocket();
-        //WebSocket.Connection serverConnection;
         try {
             factory.start();
             WebSocketClient wsClient = factory.newWebSocketClient();
             URI uri = new URI(clothoURI);
-            //Future fut = wsClient.open(uri, clothoWebSocket);
             Future fut = wsClient.open(uri, clothoSocket);
             serverConnection = (WebSocket.Connection) fut.get(10, TimeUnit.SECONDS);
             String jsonString = "{\"channel\":\"create\",\"data\":{\"name\":\"newPart\",\"sequence\":\"ATGCGTAGA\"},\"requestId\":2}";
-            //serverConnection.sendMessage("Hello Clotho!");
-            serverConnection = (WebSocket.Connection) fut.get(10, TimeUnit.SECONDS);
-            //serverConnection.sendMessage(jsonString);
+            
             String jsonQuery = "{\"channel\":\"queryOne\",\"data\":{\"name\":\"newPart\"},\"requestId\":3}";
 
-            serverConnection = (WebSocket.Connection) fut.get(10, TimeUnit.SECONDS);
             clothoSocket.addMessageListener(conn);
             Object ret = conn.query(serverConnection, jsonQuery);
             System.out.println("This is it!" + ret);
@@ -57,5 +65,8 @@ public class ClothoAPI {
                 Logger.getLogger(Clotho.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        */
+        //</editor-fold >
+        
     }
 }

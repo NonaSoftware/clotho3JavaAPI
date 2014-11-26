@@ -9,6 +9,7 @@ package org.clothoapi.clotho3javaapi;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONObject;
 import org.eclipse.jetty.websocket.WebSocket;
 
@@ -16,6 +17,8 @@ import org.eclipse.jetty.websocket.WebSocket;
  *
  * @author prashantvaidyanathan
  */
+
+@Slf4j
 public class Clotho implements MessageListener
 {
     
@@ -25,16 +28,26 @@ public class Clotho implements MessageListener
     public static String requestId;
     public static Channel channel;
     
-    public static Object query(WebSocket.Connection serverConnection, String queryString)
+    
+    private static WebSocket.Connection connection;
+  
+    public Clotho(ClothoConnection clothoConn)
+    {
+        System.out.println("New Connection established");
+        connection = clothoConn.getServerConnection();
+        clothoConn.clothoSocket.addMessageListener(this);
+    }
+    
+    public static Object query(String queryString)
     {
         channel = Channel.queryOne;
         received = false;
         
         try {
-            serverConnection.sendMessage(queryString);
+            connection.sendMessage(queryString);
             while(!received)
             {
-                //System.out.println("Waiting");
+                System.out.println("Waiting");
             }
             received = false;
             return receivedObject;
@@ -58,13 +71,17 @@ public class Clotho implements MessageListener
         {
             if(messageObject.get("channel").equals("say"))
             {
-                System.out.println("Data : \n"+messageObject.get("data"));
+                //System.out.println("Data : \n"+messageObject.get("data"));
                 JSONObject dataObject = JSONObject.fromObject(messageObject.get("data"));
-                if(dataObject.get("text").equals(null))
+                if(dataObject.get("text") == null)
                 {
                     System.out.println("No results found!");
                     received = true;
                     receivedObject = messageObject.get("data");
+                }
+                else
+                {
+                    System.out.println(dataObject.get("text"));
                 }
             }
             if(messageObject.get("channel").equals("queryOne"))

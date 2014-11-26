@@ -30,9 +30,6 @@ public class ClothoWebSocket  implements WebSocket.OnTextMessage
     private List _listeners = new ArrayList();
 
     
-   
-    
-    
     @Override
     public void onMessage(String message) {
         _messageData = message;
@@ -66,13 +63,12 @@ public class ClothoWebSocket  implements WebSocket.OnTextMessage
     
     
     
-    
     @Override
     public void onOpen(Connection connection) {
         System.out.println("Connection has been established!\nConnection id : "+connection);
         /*try {
             String helloString = "{\"channel\":\"say\",\"data\":\"Establish Connection!\",\"requestId\":1}";
-            //connection.sendMessage(helloString);
+            connection.sendMessage(helloString);
         
         } catch (IOException ex) {
             Logger.getLogger(ClothoWebSocket.class.getName()).log(Level.SEVERE, null, ex);
