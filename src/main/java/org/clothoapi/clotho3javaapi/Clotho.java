@@ -29,6 +29,7 @@ public class Clotho implements MessageListener
     
     public static Object receivedObject;
     private static boolean received;
+    private static boolean successfulResult;
     
     public static String requestId;
     public static Channel channel;
@@ -51,25 +52,23 @@ public class Clotho implements MessageListener
         return reqId;
     }
     
-    public static Object query(Map map) 
+    public static Object queryOne(Map map) 
     {
+        JSONObject resultObject = null;
         getRequestId();
         channel = Channel.queryOne;
         received = false;
-        
-        
-        
-        //System.out.println("Query String is : "+queryString);
-        
+        successfulResult = false;
         try {
             StringWriter mapStringWriter = new StringWriter();
             JSONValue.writeJSONString(map, mapStringWriter);
             String mapText = mapStringWriter.toString();
             //System.out.println(jsonText);
+            requestId = getRequestId();
             Map queryMap = new HashMap();
             queryMap.put("channel", channel.toString());
             queryMap.put("data", map);
-            queryMap.put("requestId", getRequestId());
+            queryMap.put("requestId", requestId);
 
             StringWriter queryStringWriter = new StringWriter();
             JSONValue.writeJSONString(queryMap, queryStringWriter);
@@ -86,9 +85,14 @@ public class Clotho implements MessageListener
             {
                 System.out.println("System time out. Please check your Clotho Connection");
             }
-            //System.out.println("System took : " + elapsedTime + " seconds to return a result");
             received = false;
-            return receivedObject;
+            
+            if(successfulResult)
+            {
+                resultObject = JSONObject.fromObject(receivedObject);
+            }
+            return resultObject;
+            
             
         } catch (IOException ex) {
             Logger.getLogger(Clotho.class.getName()).log(Level.SEVERE, null, ex);
@@ -102,39 +106,35 @@ public class Clotho implements MessageListener
     {
         String message = event.getMessage();
         String nullString = null;
-        System.out.println("This is a message :" + message);
-        //System.out.println("Got a result : " + event.getMessage());
-        //System.out.println("Got a result : "+message);
+        //System.out.println("This is a message :" + message);
         JSONObject messageObject = JSONObject.fromObject(message);
         try
         {
-            if(messageObject.get("channel").equals("say"))
+            if (this.requestId.equals(messageObject.get("requestId").toString())) 
             {
-                
-                JSONObject dataObject = JSONObject.fromObject(messageObject.get("data"));
-                
-                System.out.println("Class : "+dataObject.get("class"));
-                System.out.println("TimeStamp : "+dataObject.get("timestamp"));
-                System.out.println("Text : "+dataObject.get("text"));
-                
-                if(dataObject.get("text").equals(nullString))
+                if (messageObject.get("channel").equals("say")) 
                 {
-                    System.out.println("No results found!");
-                    received = true;
+
+                    JSONObject dataObject = JSONObject.fromObject(messageObject.get("data"));
+                    if (dataObject.get("text").equals(nullString)) 
+                    {
+                        System.out.println("No results found!");
+                        received = true;
+                        receivedObject = messageObject.get("data");
+
+                    } 
+                    else 
+                    {
+                        System.out.println(dataObject.get("text"));
+                    }
+                }
+                if (messageObject.get("channel").equals(this.channel.toString())) 
+                {
+                    successfulResult = true;
                     receivedObject = messageObject.get("data");
-                    
-                }
-                else
-                {
-                    System.out.println(dataObject.get("text"));
+                    received = true;
                 }
             }
-            if(messageObject.get("channel").equals(this.channel.toString()))
-            {
-                receivedObject = messageObject.get("data");
-                received = true;
-            }
-            //System.out.println("Message Channel : " + messageObject.get("channel"));
         }
         catch(Exception e)
         {

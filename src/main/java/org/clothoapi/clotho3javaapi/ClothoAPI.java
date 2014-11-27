@@ -7,6 +7,7 @@ package org.clothoapi.clotho3javaapi;
 
 import java.util.HashMap;
 import java.util.Map;
+import net.sf.json.JSONObject;
 
 /**
  *
@@ -22,14 +23,20 @@ public class ClothoAPI {
         ClothoConnection conn = new ClothoConnection("wss://localhost:8443/websocket");
         Clotho clothoObject = new Clotho(conn);
         
-        String jsonQuery = "{\"channel\":\"queryOne\",\"data\":{\"name\":\"newPart\"},\"requestId\":3}";
-        
         Map map = new HashMap();
-        map.put("name","newPart");
+        map.put("name","newPart1");
         
-        Object ret = clothoObject.query(map);
+        Object ret = clothoObject.queryOne(map);
+        System.out.println("The result is " + ((JSONObject)ret).get("sequence"));
         
-        System.out.println("The result is " + ret);
+        Map map2 = new HashMap();
+        map2.put("name","newPart");
+        
+        Object ret2 = clothoObject.queryOne(map2);
+        System.out.println("The result is " + ((JSONObject)ret2).get("schema"));
+        
+        
+        
         
         conn.closeConnection();
         
