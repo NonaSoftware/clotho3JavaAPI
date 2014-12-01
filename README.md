@@ -5,7 +5,7 @@ Java API for Clotho 3, for Java Clients
 ### Installastion
 
 ### Functions
-*query
+* query
 * queryOne
 * get
 * getAll
