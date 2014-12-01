@@ -5,10 +5,10 @@ Java API for Clotho 3, for Java Clients
 ### Installastion
 
 ### Functions
-1 query
-2 queryOne
-3 get
-4 getAll
-5 create
-6 createAll
-7 submit
+*query
+* queryOne
+* get
+* getAll
+* create
+* createAll
+* submit
