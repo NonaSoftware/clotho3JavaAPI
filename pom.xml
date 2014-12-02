@@ -8,6 +8,7 @@
     <name>Clotho3JavaAPI</name>
     
     <build>
+        <finalName>clotho3api</finalName>
         <plugins>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
