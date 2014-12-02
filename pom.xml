@@ -7,6 +7,27 @@
     <packaging>jar</packaging>
     <name>Clotho3JavaAPI</name>
     
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    
     
     <dependencies>
         <dependency>
@@ -70,6 +91,8 @@
             <version>1.7.5</version>
         </dependency>
     </dependencies>
+    
+    
     
     
     <properties>
