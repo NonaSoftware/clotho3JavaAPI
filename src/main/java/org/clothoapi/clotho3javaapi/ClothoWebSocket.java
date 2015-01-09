@@ -25,13 +25,14 @@ import org.eclipse.jetty.websocket.WebSocket;
 //@Slf4j
 public class ClothoWebSocket  implements WebSocket.OnTextMessage
 {
-    
+   
     private String _messageData;
     private List _listeners = new ArrayList();
 
     
     @Override
     public void onMessage(String message) {
+        
         _messageData = message;
         fireMessageEvent();
     }
