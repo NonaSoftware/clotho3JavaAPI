@@ -56,8 +56,8 @@ public class ClothoTest {
         createPart.put("schema","org.clothocad.testapi");
         createPart.put("id", "testAPIquery");
         
-        clothoObject.create(createPart);
-        
+        Object result = clothoObject.create(createPart);
+        System.out.println("FROM CLOTHO!! "+result);
         Map map = new HashMap();
         map.put("id","testAPIquery");
         
