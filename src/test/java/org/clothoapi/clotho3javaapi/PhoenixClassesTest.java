@@ -20,14 +20,61 @@ public class PhoenixClassesTest {
     public static void main(String[] args) {
         
         System.out.println("Start Test for Phoenix Modules\n\n");
-        testqueryFeature();
-        testquerySpecificName("cI.ref");
-        testquerySpecificName("T-Sapphire.ref");
-        
-        
-                
-        testNestedJSONcreation();
+        //testqueryFeature();
+        //testquerySpecificName("cI.ref");
+        //testquerySpecificName("T-Sapphire.ref");
+        testPhoenixParts();
+        testPhoenixquery();
         System.out.println("\n\nEnd Test for Phoenix Modules");
+    }
+    
+    public static void testPhoenixParts()
+    {
+        
+        ClothoConnection conn = new ClothoConnection("wss://localhost:8443/websocket");
+        Clotho clothoObject = new Clotho(conn);
+        Map map = new HashMap();
+        map.put("name","partTest123.ph");
+        map.put("id", "testPart123");
+        JSONArray emArray = new JSONArray();
+        JSONObject o1 = new JSONObject();
+        JSONObject o2 = new JSONObject();
+        JSONObject o3 = new JSONObject();
+        
+        o1.put("1",0.90);
+        o2.put("2",30.90);
+        o3.put("3",4.50);
+        
+        emArray.add(o1);
+        emArray.add(o2);
+        emArray.add(o3);
+        
+        map.put("em", emArray);
+        
+        JSONObject exObj = new JSONObject();
+        exObj.put("1", 0.1);
+        exObj.put("2", 1.1);
+        exObj.put("3", 2.1);
+        exObj.put("4", 3.1);
+        
+        map.put("ex", exObj);
+        
+        clothoObject.set(map);
+        
+        conn.closeConnection();
+        
+    }
+    public static void testPhoenixquery()
+    {
+        ClothoConnection conn = new ClothoConnection("wss://localhost:8443/websocket");
+        Clotho clothoObject = new Clotho(conn);
+        Map map = new HashMap();
+        map.put("id", "testPart123");
+        Object query = clothoObject.queryOne(map);
+        System.out.println(((JSONObject)query).get("em"));
+        System.out.println(((JSONObject)query).get("ex"));
+        
+        conn.closeConnection();
     }
     
     public static void testquerySpecificName(String namefield)
@@ -67,11 +114,6 @@ public class PhoenixClassesTest {
         JSONArray array = (JSONArray) query;
         //System.out.println("Result for Feature query is : "+array);
         conn.closeConnection();
-    }
-    
-    public static void testNestedJSONcreation()
-    {
-        
     }
     
 }
