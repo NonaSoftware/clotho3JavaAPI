@@ -58,7 +58,7 @@ public class Clotho implements MessageListener
     
     
     
-    public static Object queryOne(Map map) 
+    public Object queryOne(Map map) 
     {
         JSONObject resultObject = null;
         getRequestId();
@@ -107,7 +107,7 @@ public class Clotho implements MessageListener
     }
     
     
-    public static Object query(Map map) 
+    public Object query(Map map) 
     {
         JSONArray resultObject = null;
         getRequestId();
@@ -157,7 +157,7 @@ public class Clotho implements MessageListener
     
     
     
-    public static Object submit(String getString) 
+    public Object submit(String getString) 
     {
         JSONObject resultObject = null;
         getRequestId();
@@ -207,7 +207,7 @@ public class Clotho implements MessageListener
     
     
     
-    public static Object get(String getString) 
+    public Object get(String getString) 
     {
         JSONObject resultObject = null;
         getRequestId();
@@ -257,7 +257,7 @@ public class Clotho implements MessageListener
     
     
     
-    public static Object getAll(List<String> getStringList) 
+    public Object getAll(List<String> getStringList) 
     {
         JSONArray resultObject = null;
         getRequestId();
@@ -307,7 +307,7 @@ public class Clotho implements MessageListener
     
     
     
-    public static Object create(Map map) 
+    public Object create(Map map) 
     {
         Object resultObject = null;
         getRequestId();
@@ -356,7 +356,7 @@ public class Clotho implements MessageListener
     }
     
     
-    public static Object set(Map map) 
+    public Object set(Map map) 
     {
         Object resultObject = null;
         getRequestId();
@@ -404,7 +404,7 @@ public class Clotho implements MessageListener
         return null;
     }
     
-    public static Object createAll(List<Map> map) 
+    public Object createAll(List<Map> map) 
     {
         Object resultObject = null;
         getRequestId();
@@ -454,7 +454,7 @@ public class Clotho implements MessageListener
     
     
     
-    public static Object setAll(List<Map> map) 
+    public Object setAll(List<Map> map) 
     {
         Object resultObject = null;
         getRequestId();
