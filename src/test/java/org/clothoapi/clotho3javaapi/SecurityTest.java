@@ -7,6 +7,7 @@ package org.clothoapi.clotho3javaapi;
 
 import java.util.HashMap;
 import java.util.Map;
+import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 /**
@@ -16,133 +17,77 @@ import org.junit.Test;
 public class SecurityTest {
     
     @Test
-    public void loginTest(){
-        ClothoConnection conn = new ClothoConnection("wss://localhost:8443/websocket");
+    public void createAndLoginTest(){
+        ClothoConnection conn = new ClothoConnection(TestArgs.clothoRemoteAddress);
         Clotho clothoObject = new Clotho(conn);
         
-        String username = "vprashant@live.com";
-        String password = "1234";
         
-        Map newUser = new HashMap();
-        newUser.put("username", username);
-        newUser.put("password", password);
-        Object result1 = clothoObject.createUser(newUser);
-        
-        Map loginMap = new HashMap();
-        loginMap.put("username", username);
-        loginMap.put("credentials", password);
-        Object result2 = clothoObject.login(loginMap);
-        System.out.println("Result :: "+ result2.toString());
-        
-        
-        Map personObject = new HashMap();
-        personObject.put("firstname", "Prashant");
-        personObject.put("username", "vprashant1");
-        personObject.put("id", ((Map)result2).get("id").toString());
-        
-        
-        System.out.println("Result 1 ID:: "+ ((Map)result1).get("id").toString());
-        System.out.println("Result 2 ID:: "+ ((Map)result2).get("id").toString());
-        
-        clothoObject.set(personObject);
-        
-        conn.closeConnection();
-        
-         
-    }
-    
-    
-    //@Test
-    public void remoteConnectionTest(){
-        ClothoConnection conn = new ClothoConnection("wss://54.68.8.207:8443/websocket");
-        Clotho clothoObject = new Clotho(conn);
+        String username = "test" + System.currentTimeMillis();  ;
+        String password = "testPassword";
         
         Map createUserMap = new HashMap();
-        createUserMap.put("username", "vprashant1");
-        createUserMap.put("password", "1234");
+        createUserMap.put("username", username);
+        createUserMap.put("password", password);
         
-        Map result = new HashMap();
-        result = (Map)(clothoObject.createUser(createUserMap));
+        Map createUserResult = new HashMap();
+        createUserResult = (Map)(clothoObject.createUser(createUserMap));
         
-        Map personObject = new HashMap();
-        personObject.put("firstname", "Prashant");
-        personObject.put("lastname", "Vaidyanathan");
-        personObject.put("id", result.get("id").toString());
-        clothoObject.set(personObject);
+        Map loginUserMap = new HashMap();
+        loginUserMap.put("username", username);
+        loginUserMap.put("credentials", password);
+        
+        Map loginResult = new HashMap();
+        loginResult = (Map)(clothoObject.login(loginUserMap));
+        
+        assertEquals(createUserResult.get("id").toString(),loginResult.get("id").toString());
+        
+        
+        Map personObjectMap = new HashMap();
+        personObjectMap.put("firstname", "Prashant");
+        personObjectMap.put("lastname", "Vaidyanathan");
+        personObjectMap.put("id", loginResult.get("id").toString());
+        Object setResult = clothoObject.set(personObjectMap);
+        
+        assertEquals(setResult.toString(),createUserResult.get("id").toString(),loginResult.get("id").toString());
         
         conn.closeConnection();
     }
     
-    //@Test
+    @Test
     public void remoteCreate(){
-        ClothoConnection conn = new ClothoConnection("wss://54.68.8.207:8443/websocket");
+        ClothoConnection conn = new ClothoConnection(TestArgs.clothoRemoteAddress);
         Clotho clothoObject = new Clotho(conn);
         
+        String username = "test" + System.currentTimeMillis();  ;
+        String password = "testPassword";
         
         Map createUserMap = new HashMap();
-        createUserMap.put("username", "vprashant1");
-        createUserMap.put("credentials", "1234");
+        createUserMap.put("username", username);
+        createUserMap.put("password", password);
         
-        clothoObject.login(createUserMap);
+        Map createUserResult = new HashMap();
+        createUserResult = (Map)(clothoObject.createUser(createUserMap));
+        
+        Map loginUserMap = new HashMap();
+        loginUserMap.put("username", username);
+        loginUserMap.put("credentials", password);
+        
+        Map loginResult = new HashMap();
+        loginResult = (Map)(clothoObject.login(loginUserMap));
+        
+        String objectName =  "TestSeq" + System.currentTimeMillis();
+        String objectId = "" + System.currentTimeMillis();
         
         Map newObject = new HashMap();
         newObject.put("seq", "ATGC");
-        newObject.put("name", "TestSeq");
+        newObject.put("name", objectName);
+        newObject.put("id", objectId);
+        Object createResult = clothoObject.create(newObject);
         
-        clothoObject.create(newObject);
+        Map getResult = new HashMap();
+        getResult = (Map)(clothoObject.get(objectId));
         
-        conn.closeConnection();
-    }
-    
-    
-    
-    //@Test
-    public void remoteOperations(){
-        ClothoConnection conn = new ClothoConnection("wss://54.68.8.207:8443/websocket");
-        Clotho clothoObject = new Clotho(conn);
-        
-        
-        Map createUserMap = new HashMap();
-        createUserMap.put("username", "vprashant1");
-        createUserMap.put("credentials", "1234");
-        
-        clothoObject.login(createUserMap);
-        
-        Map newObject = new HashMap();
-        newObject.put("schema", "org.clothocad.model.Person");
-        newObject.put("name", "vprashant1");
-        
-        Object result = clothoObject.query(newObject);
-        System.out.println("Result ::" + result.toString());
-        
-        Object getResult = clothoObject.get("55a2d402e4b0d88bfc624d7e");
-        System.out.println("Get Result :: "+ getResult.toString());
-        
-        Map modifyPerson = new HashMap();
-        modifyPerson.put("firstname", "Prashant");
-        modifyPerson.put("lastname", "Vaidyanathan");
-        modifyPerson.put("id", "55a2d402e4b0d88bfc624d7e");
-        clothoObject.set(modifyPerson);
-        
-        conn.closeConnection();
-    }
-    
-    //@Test
-    public void createUserTest(){
-        ClothoConnection conn = new ClothoConnection("wss://localhost:8443/websocket");
-        Clotho clothoObject = new Clotho(conn);
-        
-        Map createUserMap = new HashMap();
-        createUserMap.put("username", "vprashant1");
-        createUserMap.put("password", "1234");
-        
-        Map result = new HashMap();
-        result = (Map)(clothoObject.createUser(createUserMap));
-        System.out.println("User Clotho Id" + result.get("id"));
-        
-        Map personObject2 = new HashMap();
-        personObject2 = (Map)clothoObject.get(result.get("id").toString());
-        System.out.println("Person :: "+ personObject2.toString());
+        assertEquals(objectName,getResult.get("name"));
         
         conn.closeConnection();
     }

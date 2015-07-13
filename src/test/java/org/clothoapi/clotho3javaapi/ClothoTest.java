@@ -47,7 +47,7 @@ public class ClothoTest {
     @Test
     public void queryOne()
     {
-        ClothoConnection conn = new ClothoConnection("wss://localhost:8443/websocket");
+        ClothoConnection conn = new ClothoConnection(TestArgs.clothoLocalAddress);
         Clotho clothoObject = new Clotho(conn);
         
         Map createPart = new HashMap();
@@ -74,7 +74,7 @@ public class ClothoTest {
     @Test
     public void query() //Tests Both Create All & Query
     {
-        ClothoConnection conn = new ClothoConnection("wss://localhost:8443/websocket");
+        ClothoConnection conn = new ClothoConnection(TestArgs.clothoLocalAddress);
         Clotho clothoObject = new Clotho(conn);
         
         
@@ -113,7 +113,7 @@ public class ClothoTest {
     @Test
     public void get()
     {
-        ClothoConnection conn = new ClothoConnection("wss://localhost:8443/websocket");
+        ClothoConnection conn = new ClothoConnection(TestArgs.clothoLocalAddress);
         Clotho clothoObject = new Clotho(conn);
         
         Map createPart = new HashMap();
@@ -135,7 +135,7 @@ public class ClothoTest {
     @Test
     public void getAll()
     {
-        ClothoConnection conn = new ClothoConnection("wss://localhost:8443/websocket");
+        ClothoConnection conn = new ClothoConnection(TestArgs.clothoLocalAddress);
         Clotho clothoObject = new Clotho(conn);
         
         Map createPart1 = new HashMap();
@@ -172,9 +172,9 @@ public class ClothoTest {
     @Test
     public void multipleConnectionTest()
     {
-        ClothoConnection conn1 = new ClothoConnection("wss://localhost:8443/websocket");
+        ClothoConnection conn1 = new ClothoConnection(TestArgs.clothoLocalAddress);
         Clotho clothoObject1 = new Clotho(conn1);
-        ClothoConnection conn2 = new ClothoConnection("wss://localhost:8443/websocket");
+        ClothoConnection conn2 = new ClothoConnection(TestArgs.clothoLocalAddress);
         Clotho clothoObject2 = new Clotho(conn2);
         
         

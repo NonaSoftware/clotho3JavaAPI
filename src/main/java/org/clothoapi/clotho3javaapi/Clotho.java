@@ -54,8 +54,6 @@ public class Clotho implements MessageListener
         return reqId;
     }
     
-    
-    
     public Object createUser(Map map) 
     {
         JSONObject resultObject = null;
@@ -104,7 +102,6 @@ public class Clotho implements MessageListener
         return null;
     }
     
-    
     public Object login(Map map) 
     {
         JSONObject resultObject = null;
@@ -121,6 +118,51 @@ public class Clotho implements MessageListener
             Map loginMap = new HashMap();
             loginMap.put("channel", channel.toString());
             loginMap.put("data", map);
+            loginMap.put("requestId", requestId);
+
+            StringWriter queryStringWriter = new StringWriter();
+            JSONValue.writeJSONString(loginMap, queryStringWriter);
+            String queryString = queryStringWriter.toString();
+            long startTime = System.currentTimeMillis();
+            long elapsedTime = 0;
+            connection.sendMessage(queryString);
+            while((!received) && (elapsedTime <10))
+            {
+                System.out.print("");
+                elapsedTime = (System.currentTimeMillis() - startTime)/1000;
+            }
+            if(elapsedTime >= 10)
+            {
+                System.out.println("System time out. Please check your Clotho Connection");
+            }
+            received = false;
+            
+            if(successfulResult)
+            {
+                resultObject = JSONObject.fromObject(receivedObject);
+            }
+            return resultObject;
+            
+            
+        } catch (IOException ex) {
+            Logger.getLogger(Clotho.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    public Object logout() 
+    {
+        JSONObject resultObject = null;
+        getRequestId();
+        channel = Channel.logout;
+        received = false;
+        successfulResult = false;
+        try {
+            
+            requestId = getRequestId();
+            Map loginMap = new HashMap();
+            loginMap.put("channel", channel.toString());
+            loginMap.put("data", "");
             loginMap.put("requestId", requestId);
 
             StringWriter queryStringWriter = new StringWriter();
@@ -441,11 +483,11 @@ public class Clotho implements MessageListener
         return null;
     }
     
-    public Object set(Map map) 
+    public Object createAll(List<Map> map) 
     {
         Object resultObject = null;
         getRequestId();
-        channel = Channel.set;
+        channel = Channel.createAll;
         received = false;
         successfulResult = false;
         try {
@@ -489,11 +531,11 @@ public class Clotho implements MessageListener
         return null;
     }
     
-    public Object createAll(List<Map> map) 
+    public Object set(Map map) 
     {
         Object resultObject = null;
         getRequestId();
-        channel = Channel.createAll;
+        channel = Channel.set;
         received = false;
         successfulResult = false;
         try {
