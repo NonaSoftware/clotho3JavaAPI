@@ -56,7 +56,102 @@ public class Clotho implements MessageListener
     
     
     
+    public Object createUser(Map map) 
+    {
+        JSONObject resultObject = null;
+        getRequestId();
+        channel = Channel.createUser;
+        received = false;
+        successfulResult = false;
+        try {
+            StringWriter mapStringWriter = new StringWriter();
+            JSONValue.writeJSONString(map, mapStringWriter);
+            String mapText = mapStringWriter.toString();
+            //System.out.println(jsonText);
+            requestId = getRequestId();
+            Map createUserMap = new HashMap();
+            createUserMap.put("channel", channel.toString());
+            createUserMap.put("data", map);
+            createUserMap.put("requestId", requestId);
+
+            StringWriter queryStringWriter = new StringWriter();
+            JSONValue.writeJSONString(createUserMap, queryStringWriter);
+            String queryString = queryStringWriter.toString();
+            long startTime = System.currentTimeMillis();
+            long elapsedTime = 0;
+            connection.sendMessage(queryString);
+            while((!received) && (elapsedTime <10))
+            {
+                System.out.print("");
+                elapsedTime = (System.currentTimeMillis() - startTime)/1000;
+            }
+            if(elapsedTime >= 10)
+            {
+                System.out.println("System time out. Please check your Clotho Connection");
+            }
+            received = false;
+            
+            if(successfulResult)
+            {
+                resultObject = JSONObject.fromObject(receivedObject);
+            }
+            return resultObject;
+            
+            
+        } catch (IOException ex) {
+            Logger.getLogger(Clotho.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
     
+    
+    public Object login(Map map) 
+    {
+        JSONObject resultObject = null;
+        getRequestId();
+        channel = Channel.login;
+        received = false;
+        successfulResult = false;
+        try {
+            StringWriter mapStringWriter = new StringWriter();
+            JSONValue.writeJSONString(map, mapStringWriter);
+            String mapText = mapStringWriter.toString();
+            //System.out.println(jsonText);
+            requestId = getRequestId();
+            Map loginMap = new HashMap();
+            loginMap.put("channel", channel.toString());
+            loginMap.put("data", map);
+            loginMap.put("requestId", requestId);
+
+            StringWriter queryStringWriter = new StringWriter();
+            JSONValue.writeJSONString(loginMap, queryStringWriter);
+            String queryString = queryStringWriter.toString();
+            long startTime = System.currentTimeMillis();
+            long elapsedTime = 0;
+            connection.sendMessage(queryString);
+            while((!received) && (elapsedTime <10))
+            {
+                System.out.print("");
+                elapsedTime = (System.currentTimeMillis() - startTime)/1000;
+            }
+            if(elapsedTime >= 10)
+            {
+                System.out.println("System time out. Please check your Clotho Connection");
+            }
+            received = false;
+            
+            if(successfulResult)
+            {
+                resultObject = JSONObject.fromObject(receivedObject);
+            }
+            return resultObject;
+            
+            
+        } catch (IOException ex) {
+            Logger.getLogger(Clotho.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
     
     public Object queryOne(Map map) 
     {
@@ -106,7 +201,6 @@ public class Clotho implements MessageListener
         return null;
     }
     
-    
     public Object query(Map map) 
     {
         JSONArray resultObject = null;
@@ -154,8 +248,6 @@ public class Clotho implements MessageListener
         }
         return null;
     }
-    
-    
     
     public Object submit(String getString) 
     {
@@ -205,8 +297,6 @@ public class Clotho implements MessageListener
         return null;
     }
     
-    
-    
     public Object get(String getString) 
     {
         JSONObject resultObject = null;
@@ -254,8 +344,6 @@ public class Clotho implements MessageListener
         }
         return null;
     }
-    
-    
     
     public Object getAll(List<String> getStringList) 
     {
@@ -305,8 +393,6 @@ public class Clotho implements MessageListener
         return null;
     }
     
-    
-    
     public Object create(Map map) 
     {
         Object resultObject = null;
@@ -354,7 +440,6 @@ public class Clotho implements MessageListener
         }
         return null;
     }
-    
     
     public Object set(Map map) 
     {
@@ -452,8 +537,6 @@ public class Clotho implements MessageListener
         return null;
     }
     
-    
-    
     public Object setAll(List<Map> map) 
     {
         Object resultObject = null;
@@ -502,7 +585,7 @@ public class Clotho implements MessageListener
         return null;
     }
     
-
+    
     @Override
     public void messageRecieved(OnMessageEvent event) 
     {

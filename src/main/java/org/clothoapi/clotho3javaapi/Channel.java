@@ -16,9 +16,9 @@ public enum Channel {
     //recent,  //Return N most recently used sharables
     submit, //Run this sloppy or concrete command
     //clear, //Replace the scriptengine behind mind with a fresh version
-    //createUser, //Create a new user account for me.
+    createUser, //Create a new user account for me.
     //updatePassword, //Update the userPassword
-    //login, //Log me into Clotho on this client with this login/password
+    login, //Log me into Clotho on this client with this login/password
     //logout, //Log me out of Clotho
     //changePassword, //Change my password to this new value
     //learn, //associate this String with this execution statement
