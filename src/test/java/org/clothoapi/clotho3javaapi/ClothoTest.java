@@ -25,11 +25,38 @@ import org.junit.Test;
  */
 public class ClothoTest {
     
+    private static String username1;
+    private static String username2;
+    private static String password;
     public ClothoTest() {
     }
     
     @BeforeClass
     public static void setUpClass() {
+        ClothoConnection conn = new ClothoConnection(TestArgs.clothoLocalAddress);
+        Clotho clothoObject = new Clotho(conn);
+        username1 = "testUser1" + System.currentTimeMillis();
+        username2 = "testUser2" + System.currentTimeMillis();
+        password = "testPassword";
+        
+        Map newUserMap1 = new HashMap();
+        newUserMap1.put("username", username1);
+        newUserMap1.put("password", password);
+        
+        Map newUserMap2 = new HashMap();
+        newUserMap2.put("username", username2);
+        newUserMap2.put("password", password);
+        
+        Object res1 = clothoObject.createUser(newUserMap1);
+        clothoObject.logout();
+        Object res2 = clothoObject.createUser(newUserMap2);
+        clothoObject.logout();
+        
+        //System.out.println("Result 1 ::" + res1.toString());
+        //System.out.println("Result 2 ::" + res2.toString());
+        
+        
+        conn.closeConnection();
     }
     
     @AfterClass
@@ -38,6 +65,7 @@ public class ClothoTest {
     
     @Before
     public void setUp() {
+        
     }
     
     @After
@@ -47,25 +75,35 @@ public class ClothoTest {
     @Test
     public void queryOne()
     {
+        String id = "testAPIquery" + System.currentTimeMillis();
         ClothoConnection conn = new ClothoConnection(TestArgs.clothoLocalAddress);
         Clotho clothoObject = new Clotho(conn);
+        
+        Map loginMap = new HashMap();
+        loginMap.put("username", username1);
+        loginMap.put("credentials", password);
+        
+        clothoObject.login(loginMap);
         
         Map createPart = new HashMap();
         createPart.put("name","createdPart");
         createPart.put("sequence","atataagcgcaaa");
         createPart.put("schema","org.clothocad.testapi");
-        createPart.put("id", "testAPIquery");
+        createPart.put("id", id);
         
         Object result = clothoObject.create(createPart);
         System.out.println("FROM CLOTHO!! "+result);
         Map map = new HashMap();
-        map.put("id","testAPIquery");
+        map.put("id",id);
         
         Object ret = clothoObject.queryOne(map);
         assertEquals(((JSONObject)ret).get("name").toString(),"createdPart");
-        assertEquals(((JSONObject)ret).get("id").toString(),"testAPIquery");
+        assertEquals(((JSONObject)ret).get("id").toString(),id);
         assertEquals(((JSONObject)ret).get("schema").toString(),"org.clothocad.testapi");
         assertEquals(((JSONObject)ret).get("sequence").toString(),"atataagcgcaaa");
+        
+        clothoObject.logout();
+        
         conn.closeConnection();
     }
     
@@ -74,9 +112,16 @@ public class ClothoTest {
     @Test
     public void query() //Tests Both Create All & Query
     {
+        String id1 = "testAPIquery1" + System.currentTimeMillis() ;
+        String id2 = "testAPIquery2" + System.currentTimeMillis() ;
         ClothoConnection conn = new ClothoConnection(TestArgs.clothoLocalAddress);
         Clotho clothoObject = new Clotho(conn);
         
+        Map loginMap = new HashMap();
+        loginMap.put("username", username1);
+        loginMap.put("credentials", password);
+        
+        clothoObject.login(loginMap);
         
         List<Map> createAllMap = new ArrayList<Map>();
         
@@ -84,13 +129,13 @@ public class ClothoTest {
         createPart1.put("name","createdPartQuery");
         createPart1.put("sequence","atataagcgcaaa");
         createPart1.put("schema","org.clothocad.testapi");
-        createPart1.put("id", "testAPIquery1");
+        createPart1.put("id", id1);
         
         Map createPart2 = new HashMap();
         createPart2.put("name","createdPartQuery");
         createPart2.put("sequence","atataagcgcaaa");
         createPart2.put("schema","org.clothocad.testapi");
-        createPart2.put("id", "testAPIquery2");
+        createPart2.put("id", id2);
         
         createAllMap.add(createPart1);
         createAllMap.add(createPart2);
@@ -101,8 +146,8 @@ public class ClothoTest {
         map.put("name","createdPartQuery");
         
         Object ret = clothoObject.query(map);
-        assertEquals(((JSONObject)((JSONArray)ret).get(0)).get("id").toString(),"testAPIquery1");
-        assertEquals(((JSONObject)((JSONArray)ret).get(1)).get("id").toString(),"testAPIquery2");
+        assertEquals(((JSONObject)((JSONArray)ret).get(0)).get("id").toString(),id1);
+        assertEquals(((JSONObject)((JSONArray)ret).get(1)).get("id").toString(),id2);
         assertEquals(((JSONObject)((JSONArray)ret).get(0)).get("name").toString(),"createdPartQuery");
         assertEquals(((JSONObject)((JSONArray)ret).get(1)).get("name").toString(),"createdPartQuery");
         
@@ -113,20 +158,27 @@ public class ClothoTest {
     @Test
     public void get()
     {
+        String id = "testAPIget" + System.currentTimeMillis();
         ClothoConnection conn = new ClothoConnection(TestArgs.clothoLocalAddress);
         Clotho clothoObject = new Clotho(conn);
+        
+        Map loginMap = new HashMap();
+        loginMap.put("username", username1);
+        loginMap.put("credentials", password);
+        
+        clothoObject.login(loginMap);
         
         Map createPart = new HashMap();
         createPart.put("name","createdPartget");
         createPart.put("sequence","atataagcgcaaa");
         createPart.put("schema","org.clothocad.testapi");
-        createPart.put("id", "testAPIget");
+        createPart.put("id", id);
         
         clothoObject.create(createPart);
         
-        Object ret = clothoObject.get("testAPIget");
+        Object ret = clothoObject.get(id);
         assertEquals(((JSONObject)ret).get("name").toString(),"createdPartget");
-        assertEquals(((JSONObject)ret).get("id").toString(),"testAPIget");
+        assertEquals(((JSONObject)ret).get("id").toString(),id);
         assertEquals(((JSONObject)ret).get("schema").toString(),"org.clothocad.testapi");
         assertEquals(((JSONObject)ret).get("sequence").toString(),"atataagcgcaaa");
         conn.closeConnection();
@@ -135,71 +187,46 @@ public class ClothoTest {
     @Test
     public void getAll()
     {
+        String id1 = "testAPIget1" + System.currentTimeMillis();
+        String id2 = "testAPIget2" + System.currentTimeMillis();
+        
         ClothoConnection conn = new ClothoConnection(TestArgs.clothoLocalAddress);
         Clotho clothoObject = new Clotho(conn);
+        
+        Map loginMap = new HashMap();
+        loginMap.put("username", username1);
+        loginMap.put("credentials", password);
+        
+        clothoObject.login(loginMap);
         
         Map createPart1 = new HashMap();
         createPart1.put("name","createdPartget1");
         createPart1.put("sequence","atataagcgcaaa");
         createPart1.put("schema","org.clothocad.testapi");
-        createPart1.put("id", "testAPIget1");
+        createPart1.put("id", id1);
         
         Map createPart2 = new HashMap();
         createPart2.put("name","createdPartget2");
         createPart2.put("sequence","atataagcgcaaa");
         createPart2.put("schema","org.clothocad.testapi");
-        createPart2.put("id", "testAPIget2");
+        createPart2.put("id", id2);
         
         
-        clothoObject.create(createPart1);
-        clothoObject.create(createPart2);
+        clothoObject.set(createPart1);
+        clothoObject.set(createPart2);
         
         List<String> objIds = new ArrayList<String>();
-        objIds.add("testAPIget1");
-        objIds.add("testAPIget2");
+        objIds.add(id1);
+        objIds.add(id2);
         
         Object ret = clothoObject.getAll(objIds);
-        assertEquals(((JSONObject)((JSONArray)ret).get(0)).get("id").toString(),"testAPIget1");
-        assertEquals(((JSONObject)((JSONArray)ret).get(1)).get("id").toString(),"testAPIget2");
+        assertEquals(((JSONObject)((JSONArray)ret).get(0)).get("id").toString(),id1);
+        assertEquals(((JSONObject)((JSONArray)ret).get(1)).get("id").toString(),id2);
         assertEquals(((JSONObject)((JSONArray)ret).get(0)).get("name").toString(),"createdPartget1");
         assertEquals(((JSONObject)((JSONArray)ret).get(1)).get("name").toString(),"createdPartget2");
         
        
         conn.closeConnection();
     }
-    
-    
-    @Test
-    public void multipleConnectionTest()
-    {
-        ClothoConnection conn1 = new ClothoConnection(TestArgs.clothoLocalAddress);
-        Clotho clothoObject1 = new Clotho(conn1);
-        ClothoConnection conn2 = new ClothoConnection(TestArgs.clothoLocalAddress);
-        Clotho clothoObject2 = new Clotho(conn2);
-        
-        
-        Map createPart1 = new HashMap();
-        createPart1.put("name","createdPartconn1");
-        createPart1.put("sequence","atataagcgcaaa");
-        createPart1.put("schema","org.clothocad.testapi");
-        createPart1.put("id", "testAPImultConn");
-        
-        clothoObject1.create(createPart1);
-        
-        
-        Map map = new HashMap();
-        map.put("id","testAPImultConn");
-        
-        Object ret = clothoObject2.queryOne(map);
-        assertEquals(((JSONObject)ret).get("name").toString(),"createdPartconn1");
-        assertEquals(((JSONObject)ret).get("id").toString(),"testAPImultConn");
-        assertEquals(((JSONObject)ret).get("schema").toString(),"org.clothocad.testapi");
-        assertEquals(((JSONObject)ret).get("sequence").toString(),"atataagcgcaaa");
-        
-        conn1.closeConnection();
-        conn2.closeConnection();
-    }
-    
-    
     
 }

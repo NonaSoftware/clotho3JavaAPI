@@ -18,7 +18,7 @@ public class SecurityTest {
     
     @Test
     public void createAndLoginTest(){
-        ClothoConnection conn = new ClothoConnection(TestArgs.clothoRemoteAddress);
+        ClothoConnection conn = new ClothoConnection(TestArgs.clothoLocalAddress);
         Clotho clothoObject = new Clotho(conn);
         
         
@@ -55,7 +55,7 @@ public class SecurityTest {
     
     @Test
     public void remoteCreate(){
-        ClothoConnection conn = new ClothoConnection(TestArgs.clothoRemoteAddress);
+        ClothoConnection conn = new ClothoConnection(TestArgs.clothoLocalAddress);
         Clotho clothoObject = new Clotho(conn);
         
         String username = "test" + System.currentTimeMillis();  ;
