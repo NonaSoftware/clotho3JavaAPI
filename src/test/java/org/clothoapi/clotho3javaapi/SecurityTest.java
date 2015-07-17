@@ -53,6 +53,38 @@ public class SecurityTest {
         conn.closeConnection();
     }
     
+    
+    @Test
+    public void createAndLoginAlternateTest(){
+        ClothoConnection conn = new ClothoConnection(TestArgs.clothoLocalAddress);
+        Clotho clothoObject = new Clotho(conn);
+        
+        
+        String username = "test" + System.currentTimeMillis();  ;
+        String password = "testPassword";
+        
+        
+        Map createUserResult = new HashMap();
+        createUserResult = (Map)(clothoObject.createUser(username,password));
+        
+        Map loginResult = new HashMap();
+        loginResult = (Map)(clothoObject.login(username,password));
+        
+        assertEquals(createUserResult.get("id").toString(),loginResult.get("id").toString());
+        
+        
+        Map personObjectMap = new HashMap();
+        personObjectMap.put("firstname", "Clotho");
+        personObjectMap.put("lastname", "User");
+        personObjectMap.put("id", loginResult.get("id").toString());
+        Object setResult = clothoObject.set(personObjectMap);
+        
+        assertEquals(setResult.toString(),createUserResult.get("id").toString(),loginResult.get("id").toString());
+        
+        conn.closeConnection();
+    }
+    
+    
     @Test
     public void remoteCreate(){
         ClothoConnection conn = new ClothoConnection(TestArgs.clothoLocalAddress);

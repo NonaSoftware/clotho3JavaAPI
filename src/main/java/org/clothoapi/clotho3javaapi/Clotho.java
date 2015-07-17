@@ -54,6 +54,13 @@ public class Clotho implements MessageListener
         return reqId;
     }
     
+    public Object createUser(String username,String password){
+        Map createUserMap = new HashMap();
+        createUserMap.put("username", username);
+        createUserMap.put("password", password);
+        return createUser(createUserMap);
+    }
+    
     public Object createUser(Map map) 
     {
         JSONObject resultObject = null;
@@ -101,6 +108,14 @@ public class Clotho implements MessageListener
         }
         return null;
     }
+    
+    public Object login(String username,String password){
+        Map loginMap = new HashMap();
+        loginMap.put("username", username);
+        loginMap.put("credentials", password);
+        return login(loginMap);
+    }
+    
     
     public Object login(Map map) 
     {
