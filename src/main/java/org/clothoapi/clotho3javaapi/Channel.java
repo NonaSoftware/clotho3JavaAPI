@@ -24,7 +24,8 @@ public enum Channel {
     //learn, //associate this String with this execution statement
     //like,
     //dislike,
-
+    grant,  //Grant Permissions
+    grantAll, //Grant All Ids permissions
     
 
 //LOGGING AND MESSAGING
