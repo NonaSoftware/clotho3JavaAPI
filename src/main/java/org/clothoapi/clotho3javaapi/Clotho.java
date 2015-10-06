@@ -84,7 +84,7 @@ public class Clotho implements MessageListener
             long startTime = System.currentTimeMillis();
             long elapsedTime = 0;
             connection.sendMessage(queryString);
-            while((!received) && (elapsedTime < Args.elapsedTime))
+            while((!received) && (elapsedTime < Args.maxTimeOut))
             {
                 System.out.print("");
                 elapsedTime = (System.currentTimeMillis() - startTime)/1000;
@@ -140,7 +140,7 @@ public class Clotho implements MessageListener
             long startTime = System.currentTimeMillis();
             long elapsedTime = 0;
             connection.sendMessage(queryString);
-            while((!received) && (elapsedTime <Args.elapsedTime))
+            while((!received) && (elapsedTime <Args.maxTimeOut))
             {
                 System.out.print("");
                 elapsedTime = (System.currentTimeMillis() - startTime)/1000;
@@ -190,7 +190,7 @@ public class Clotho implements MessageListener
             long startTime = System.currentTimeMillis();
             long elapsedTime = 0;
             connection.sendMessage(queryString);
-            while((!received) && (elapsedTime <Args.elapsedTime))
+            while((!received) && (elapsedTime <Args.maxTimeOut))
             {
                 System.out.print("");
                 elapsedTime = (System.currentTimeMillis() - startTime)/1000;
@@ -235,7 +235,7 @@ public class Clotho implements MessageListener
             long startTime = System.currentTimeMillis();
             long elapsedTime = 0;
             connection.sendMessage(queryString);
-            while((!received) && (elapsedTime <Args.elapsedTime))
+            while((!received) && (elapsedTime <Args.maxTimeOut))
             {
                 System.out.print("");
                 elapsedTime = (System.currentTimeMillis() - startTime)/1000;
@@ -283,7 +283,7 @@ public class Clotho implements MessageListener
             long startTime = System.currentTimeMillis();
             long elapsedTime = 0;
             connection.sendMessage(queryString);
-            while((!received) && (elapsedTime <Args.elapsedTime))
+            while((!received) && (elapsedTime <Args.maxTimeOut))
             {
                 System.out.print("");
                 elapsedTime = (System.currentTimeMillis() - startTime)/1000;
@@ -331,7 +331,7 @@ public class Clotho implements MessageListener
             long startTime = System.currentTimeMillis();
             long elapsedTime = 0;
             connection.sendMessage(queryString);
-            while((!received) && (elapsedTime <Args.elapsedTime))
+            while((!received) && (elapsedTime <Args.maxTimeOut))
             {
                 System.out.print("");
                 elapsedTime = (System.currentTimeMillis() - startTime)/1000;
@@ -379,7 +379,7 @@ public class Clotho implements MessageListener
             long startTime = System.currentTimeMillis();
             long elapsedTime = 0;
             connection.sendMessage(queryString);
-            while((!received) && (elapsedTime <Args.elapsedTime))
+            while((!received) && (elapsedTime <Args.maxTimeOut))
             {
                 System.out.print("");
                 elapsedTime = (System.currentTimeMillis() - startTime)/1000;
@@ -427,7 +427,7 @@ public class Clotho implements MessageListener
             long startTime = System.currentTimeMillis();
             long elapsedTime = 0;
             connection.sendMessage(queryString);
-            while((!received) && (elapsedTime <Args.elapsedTime))
+            while((!received) && (elapsedTime <Args.maxTimeOut))
             {
                 System.out.print("");
                 elapsedTime = (System.currentTimeMillis() - startTime)/1000;
@@ -475,7 +475,7 @@ public class Clotho implements MessageListener
             long startTime = System.currentTimeMillis();
             long elapsedTime = 0;
             connection.sendMessage(queryString);
-            while((!received) && (elapsedTime <Args.elapsedTime))
+            while((!received) && (elapsedTime <Args.maxTimeOut))
             {
                 System.out.print("");
                 elapsedTime = (System.currentTimeMillis() - startTime)/1000;
@@ -523,7 +523,7 @@ public class Clotho implements MessageListener
             long startTime = System.currentTimeMillis();
             long elapsedTime = 0;
             connection.sendMessage(queryString);
-            while((!received) && (elapsedTime <Args.elapsedTime))
+            while((!received) && (elapsedTime <Args.maxTimeOut))
             {
                 System.out.print("");
                 elapsedTime = (System.currentTimeMillis() - startTime)/1000;
@@ -571,7 +571,7 @@ public class Clotho implements MessageListener
             long startTime = System.currentTimeMillis();
             long elapsedTime = 0;
             connection.sendMessage(queryString);
-            while((!received) && (elapsedTime <Args.elapsedTime))
+            while((!received) && (elapsedTime <Args.maxTimeOut))
             {
                 System.out.print("");
                 elapsedTime = (System.currentTimeMillis() - startTime)/1000;
@@ -619,7 +619,7 @@ public class Clotho implements MessageListener
             long startTime = System.currentTimeMillis();
             long elapsedTime = 0;
             connection.sendMessage(queryString);
-            while((!received) && (elapsedTime <Args.elapsedTime))
+            while((!received) && (elapsedTime <Args.maxTimeOut))
             {
                 System.out.print("");
                 elapsedTime = (System.currentTimeMillis() - startTime)/1000;
@@ -667,7 +667,7 @@ public class Clotho implements MessageListener
             long startTime = System.currentTimeMillis();
             long elapsedTime = 0;
             connection.sendMessage(queryString);
-            while((!received) && (elapsedTime <Args.elapsedTime))
+            while((!received) && (elapsedTime <Args.maxTimeOut))
             {
                 System.out.print("");
                 elapsedTime = (System.currentTimeMillis() - startTime)/1000;

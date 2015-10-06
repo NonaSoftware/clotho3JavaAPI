@@ -52,6 +52,30 @@ public class ClothoConnection {
     
     }
     
+    
+    public ClothoConnection(String clothoURI, long maxTimeOut)
+    {
+        Args.maxTimeOut = maxTimeOut;
+        factory = new WebSocketClientFactory();
+        clothoSocket = new ClothoWebSocket();
+        
+        try {
+            URI uri = new URI(clothoURI);
+            factory.start();
+            WebSocketClient wsClient = factory.newWebSocketClient();
+            wsClient.setMaxTextMessageSize(Args.maxTextSize);
+            fut = wsClient.open(uri, clothoSocket);
+            
+            serverConnection = (WebSocket.Connection) fut.get();
+//                    .get(10, TimeUnit.SECONDS);
+            
+        } catch (Exception ex) {
+            Logger.getLogger(ClothoConnection.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    
+    }
+    
+    
     public void closeConnection()
     {
         System.out.println("Closing Connection");

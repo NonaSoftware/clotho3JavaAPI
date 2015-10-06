@@ -10,6 +10,6 @@ package org.clothoapi.clotho3javaapi;
  * @author prash
  */
 public class Args {
-    public static final long elapsedTime = 10;
-    public static final int maxTextSize = 999999;
+    public static long maxTimeOut = 30;
+    public static int maxTextSize = 999999;    
 }
