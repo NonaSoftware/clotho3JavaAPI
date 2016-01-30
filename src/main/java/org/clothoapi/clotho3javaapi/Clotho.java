@@ -60,6 +60,99 @@ public class Clotho implements MessageListener
         return createUser(createUserMap);
     }
     
+    
+    public Object autocomplete(String query) 
+    {
+        JSONArray resultObject = null;
+        getRequestId();
+        channel = Channel.autocomplete;
+        received = false;
+        successfulResult = false;
+        try {
+            
+            requestId = getRequestId();
+            Map createUserMap = new HashMap();
+            createUserMap.put("channel", channel.toString());
+            createUserMap.put("data", "query=["+query+"]");
+            createUserMap.put("requestId", requestId);
+
+            StringWriter queryStringWriter = new StringWriter();
+            JSONValue.writeJSONString(createUserMap, queryStringWriter);
+            String queryString = queryStringWriter.toString();
+            long startTime = System.currentTimeMillis();
+            long elapsedTime = 0;
+            connection.sendMessage(queryString);
+            while((!received) && (elapsedTime < Args.maxTimeOut))
+            {
+                System.out.print("");
+                elapsedTime = (System.currentTimeMillis() - startTime)/1000;
+            }
+            if(elapsedTime >= 10)
+            {
+                System.out.println("System time out. Please check your Clotho Connection");
+            }
+            received = false;
+            
+            if(successfulResult)
+            {
+                resultObject = JSONArray.fromObject(receivedObject);
+            }
+            return resultObject;
+            
+            
+        } catch (IOException ex) {
+            Logger.getLogger(Clotho.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    
+    public Object startsWith(Map map) 
+    {
+        JSONArray resultObject = null;
+        getRequestId();
+        channel = Channel.startsWith;
+        received = false;
+        successfulResult = false;
+        try {
+            
+            requestId = getRequestId();
+            Map createUserMap = new HashMap();
+            createUserMap.put("channel", channel.toString());
+            createUserMap.put("data", map);
+            createUserMap.put("requestId", requestId);
+
+            StringWriter queryStringWriter = new StringWriter();
+            JSONValue.writeJSONString(createUserMap, queryStringWriter);
+            String queryString = queryStringWriter.toString();
+            long startTime = System.currentTimeMillis();
+            long elapsedTime = 0;
+            connection.sendMessage(queryString);
+            while((!received) && (elapsedTime < Args.maxTimeOut))
+            {
+                System.out.print("");
+                elapsedTime = (System.currentTimeMillis() - startTime)/1000;
+            }
+            if(elapsedTime >= 10)
+            {
+                System.out.println("System time out. Please check your Clotho Connection");
+            }
+            received = false;
+            
+            if(successfulResult)
+            {
+                resultObject = JSONArray.fromObject(receivedObject);
+            }
+            return resultObject;
+            
+            
+        } catch (IOException ex) {
+            Logger.getLogger(Clotho.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    
     public Object createUser(Map map) 
     {
         JSONObject resultObject = null;
@@ -68,10 +161,7 @@ public class Clotho implements MessageListener
         received = false;
         successfulResult = false;
         try {
-            StringWriter mapStringWriter = new StringWriter();
-            JSONValue.writeJSONString(map, mapStringWriter);
-            String mapText = mapStringWriter.toString();
-            //System.out.println(jsonText);
+            
             requestId = getRequestId();
             Map createUserMap = new HashMap();
             createUserMap.put("channel", channel.toString());
@@ -124,10 +214,7 @@ public class Clotho implements MessageListener
         received = false;
         successfulResult = false;
         try {
-            StringWriter mapStringWriter = new StringWriter();
-            JSONValue.writeJSONString(map, mapStringWriter);
-            String mapText = mapStringWriter.toString();
-            //System.out.println(jsonText);
+            
             requestId = getRequestId();
             Map loginMap = new HashMap();
             loginMap.put("channel", channel.toString());
@@ -174,10 +261,7 @@ public class Clotho implements MessageListener
         received = false;
         successfulResult = false;
         try {
-            StringWriter mapStringWriter = new StringWriter();
-            JSONValue.writeJSONString(map, mapStringWriter);
-            String mapText = mapStringWriter.toString();
-            //System.out.println(jsonText);
+            
             requestId = getRequestId();
             Map loginMap = new HashMap();
             loginMap.put("channel", channel.toString());
@@ -267,10 +351,7 @@ public class Clotho implements MessageListener
         received = false;
         successfulResult = false;
         try {
-            StringWriter mapStringWriter = new StringWriter();
-            JSONValue.writeJSONString(map, mapStringWriter);
-            String mapText = mapStringWriter.toString();
-            //System.out.println(jsonText);
+            
             requestId = getRequestId();
             Map queryMap = new HashMap();
             queryMap.put("channel", channel.toString());
@@ -315,10 +396,7 @@ public class Clotho implements MessageListener
         received = false;
         successfulResult = false;
         try {
-            StringWriter mapStringWriter = new StringWriter();
-            JSONValue.writeJSONString(map, mapStringWriter);
-            String mapText = mapStringWriter.toString();
-            //System.out.println(jsonText);
+            
             requestId = getRequestId();
             Map queryMap = new HashMap();
             queryMap.put("channel", channel.toString());
@@ -363,10 +441,7 @@ public class Clotho implements MessageListener
         received = false;
         successfulResult = false;
         try {
-            /*StringWriter mapStringWriter = new StringWriter();
-            JSONValue.writeJSONString(map, mapStringWriter);
-            String mapText = mapStringWriter.toString();*/
-            //System.out.println(jsonText);
+            
             requestId = getRequestId();
             Map queryMap = new HashMap();
             queryMap.put("channel", channel.toString());
@@ -411,10 +486,7 @@ public class Clotho implements MessageListener
         received = false;
         successfulResult = false;
         try {
-            /*StringWriter mapStringWriter = new StringWriter();
-            JSONValue.writeJSONString(map, mapStringWriter);
-            String mapText = mapStringWriter.toString();*/
-            //System.out.println(jsonText);
+            
             requestId = getRequestId();
             Map queryMap = new HashMap();
             queryMap.put("channel", channel.toString());
@@ -459,10 +531,7 @@ public class Clotho implements MessageListener
         received = false;
         successfulResult = false;
         try {
-            /*StringWriter mapStringWriter = new StringWriter();
-            JSONValue.writeJSONString(map, mapStringWriter);
-            String mapText = mapStringWriter.toString();*/
-            //System.out.println(jsonText);
+            
             requestId = getRequestId();
             Map queryMap = new HashMap();
             queryMap.put("channel", channel.toString());
@@ -507,10 +576,7 @@ public class Clotho implements MessageListener
         received = false;
         successfulResult = false;
         try {
-            StringWriter mapStringWriter = new StringWriter();
-            JSONValue.writeJSONString(map, mapStringWriter);
-            String mapText = mapStringWriter.toString();
-            //System.out.println(jsonText);
+            
             requestId = getRequestId();
             Map queryMap = new HashMap();
             queryMap.put("channel", channel.toString());
@@ -555,10 +621,7 @@ public class Clotho implements MessageListener
         received = false;
         successfulResult = false;
         try {
-            StringWriter mapStringWriter = new StringWriter();
-            JSONValue.writeJSONString(map, mapStringWriter);
-            String mapText = mapStringWriter.toString();
-            //System.out.println(jsonText);
+             
             requestId = getRequestId();
             Map queryMap = new HashMap();
             queryMap.put("channel", channel.toString());
@@ -603,10 +666,7 @@ public class Clotho implements MessageListener
         received = false;
         successfulResult = false;
         try {
-            StringWriter mapStringWriter = new StringWriter();
-            JSONValue.writeJSONString(map, mapStringWriter);
-            String mapText = mapStringWriter.toString();
-            //System.out.println(jsonText);
+            
             requestId = getRequestId();
             Map queryMap = new HashMap();
             queryMap.put("channel", channel.toString());
@@ -651,10 +711,7 @@ public class Clotho implements MessageListener
         received = false;
         successfulResult = false;
         try {
-            StringWriter mapStringWriter = new StringWriter();
-            JSONValue.writeJSONString(map, mapStringWriter);
-            String mapText = mapStringWriter.toString();
-            //System.out.println(jsonText);
+            
             requestId = getRequestId();
             Map queryMap = new HashMap();
             queryMap.put("channel", channel.toString());
@@ -697,7 +754,7 @@ public class Clotho implements MessageListener
     {
         String message = event.getMessage();
         String nullString = null;
-        //System.out.println("This is a message :" + message);
+        
         JSONObject messageObject = JSONObject.fromObject(message);
         try
         {

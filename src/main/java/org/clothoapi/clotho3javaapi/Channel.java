@@ -1,38 +1,27 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+ package org.clothoapi.clotho3javaapi;
 
-package org.clothoapi.clotho3javaapi;
-
-/**
- *
- * @author prashantvaidyanathan
- */
 public enum Channel {
-    //autocomplete, //Return potential commands that start with this substring
-    //autocompleteDetail, //Return the metadata for a Sharable
-    //recent,  //Return N most recently used sharables
+
+//HUMAN INTERACTION
+    autocomplete, //Return potential commands that start with this substring
+    autocompleteDetail, //Return the metadata for a Sharable
+    recent,  //Return N most recently used sharables
     submit, //Run this sloppy or concrete command
-    //clear, //Replace the scriptengine behind mind with a fresh version
+    clear, //Replace the scriptengine behind mind with a fresh version
     createUser, //Create a new user account for me.
-    //updatePassword, //Update the userPassword
-    login, //Log me into Clotho on this client with this login/password
-    logout, //Log me out of Clotho
-    //changePassword, //Change my password to this new value
-    //learn, //associate this String with this execution statement
-    //like,
-    //dislike,
-    grant,  //Grant Permissions
-    grantAll, //Grant All Ids permissions
+    linkPerson, //Link an existing? or new Person to an existing Person Object
+    getAssociatedPerson, //Get a list of all Person Objects associated with that primaryEmail.
+    learn, //associate this String with this execution statement
+    like,
+    dislike,
+
     
 
 //LOGGING AND MESSAGING
     log, //write a message to the console.log spot
     say, //Post a message to all search bars for this Person
-    //note, //Remember this message in my personal log (not implemented)
-    //alert, //Post an alert to this Person, wherever they say they want to be contacted in preferences.  This isn't a javascript alert().  That is just one implementation.
+    note, //Remember this message in my personal log (not implemented)
+    alert, //Post an alert to this Person, wherever they say they want to be contacted in preferences.  This isn't a javascript alert().  That is just one implementation.
 
     
 //DATA MANIPULATION
@@ -50,13 +39,26 @@ public enum Channel {
     setAll,
     queryOne,
     
-    //validate,
+    validate,
+    
+    startsWith,
+    endsWith,
+    contains,
     
 //EXECUTION
     run, //run this Function
-    //listen, //Listen for events, and in response do this execution statement
-    //unlisten, //Remove a listener for an event
+    listen, //Listen for events, and in response do this execution statement
+    unlisten, //Remove a listener for an event
+    
+//SECURITY
+    grant,
+    grantAll,
+    login, //Log me into Clotho on this client with this login/password
+    logout, //Log me out of Clotho
+    changePassword, //Change my password to this new value
+    createAccount,
+    updatePassword, //Update the userPassword
     
 //OTHER
-    //reloadModels, //convenience function for reloading test data
+    reloadModels, //convenience function for reloading test data
 }
