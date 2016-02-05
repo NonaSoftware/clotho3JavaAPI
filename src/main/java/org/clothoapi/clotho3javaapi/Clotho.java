@@ -71,7 +71,7 @@ public class Clotho implements MessageListener
         requestId = getRequestId();
         Map queryMap = new HashMap();
         queryMap.put("channel", channel.toString());
-        queryMap.put("data", query);
+        queryMap.put("data", "query=["+query+"]");
         queryMap.put("requestId", requestId);
         
         String queryString = queryString(queryMap);
