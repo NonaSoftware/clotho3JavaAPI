@@ -41,7 +41,7 @@ public class autoCompleteTest {
     }
     
     
-    //@Test
+    @Test
     public void startsWith(){
        ClothoConnection conn = new ClothoConnection(TestArgs.clothoLocalAddress);
        Clotho clothoObject = new Clotho(conn);
