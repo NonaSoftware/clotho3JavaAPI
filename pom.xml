@@ -31,11 +31,6 @@
     
     
     <dependencies>
-        <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-websocket</artifactId>
-            <version>${jetty-websocket-version}</version>
-        </dependency>
 
         <dependency>
             <groupId>org.eclipse.jetty.websocket</groupId>
@@ -104,6 +99,11 @@
             <version>1.0</version>
             <scope>test</scope>
             <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-io</artifactId>
+            <version>9.3.10.v20160621</version>
         </dependency>
     </dependencies>
     

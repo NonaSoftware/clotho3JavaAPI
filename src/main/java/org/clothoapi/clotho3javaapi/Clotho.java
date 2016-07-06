@@ -14,9 +14,8 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import lombok.extern.slf4j.Slf4j;
-import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-import org.eclipse.jetty.websocket.WebSocket;
+import org.eclipse.jetty.websocket.api.Session;
 import org.json.simple.JSONValue;
 
 /**
@@ -35,13 +34,12 @@ public class Clotho implements MessageListener
     public String requestId;
     public Channel channel;
     
-    
-    private WebSocket.Connection connection;
+    private Session session;
   
     public Clotho(ClothoConnection clothoConn)
     {
         System.out.println("New Connection established");
-        connection = clothoConn.getServerConnection();
+        session = clothoConn.session;
         clothoConn.clothoSocket.addMessageListener(this);
     }
     
@@ -341,30 +339,30 @@ public class Clotho implements MessageListener
         
         received = false;
         successfulResult = false;
-        try {
-            long startTime = System.currentTimeMillis();
-            long elapsedTime = 0;
-            connection.sendMessage(queryString);
-            while((!received) && (elapsedTime <Args.maxTimeOut))
-            {
-                System.out.print("");
-                elapsedTime = (System.currentTimeMillis() - startTime)/1000;
-            }
-            if(elapsedTime >= 10)
-            {
-                System.out.println("System time out. Please check your Clotho Connection");
-            }
-            received = false;
+        long startTime = System.currentTimeMillis();
+        long elapsedTime = 0;
             
-            if(successfulResult)
-            {
-                resultObject = receivedObject;
-            }
-            return resultObject;
+        try {
+            session.getRemote().sendString(queryString);
         } catch (IOException ex) {
             Logger.getLogger(Clotho.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return null;
+        //connection.sendMessage(queryString);
+        while((!received) && (elapsedTime <Args.maxTimeOut))
+        {
+            System.out.print("");
+            elapsedTime = (System.currentTimeMillis() - startTime)/1000;
+        }
+        if(elapsedTime >= 10)
+        {
+            System.out.println("System time out. Please check your Clotho Connection");
+        }
+        received = false;
+        if(successfulResult)
+        {
+            resultObject = receivedObject;
+        }
+        return resultObject;
     }
     
     public String queryString(Map queryMap) {

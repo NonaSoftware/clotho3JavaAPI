@@ -7,15 +7,14 @@
 package org.clothoapi.clotho3javaapi;
 
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.EventObject;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import net.sf.json.JSONObject;
-import org.eclipse.jetty.websocket.WebSocket;
+import org.eclipse.jetty.websocket.api.Session;
+import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
+import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
+import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
+import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 //import lombok.extern.slf4j.Slf4j;
 /**
  *
@@ -23,14 +22,17 @@ import org.eclipse.jetty.websocket.WebSocket;
  */
 
 //@Slf4j
-public class ClothoWebSocket  implements WebSocket.OnTextMessage
+@WebSocket
+public class ClothoWebSocket
 {
    
     private String _messageData;
     private List _listeners = new ArrayList();
-
     
-    @Override
+    @SuppressWarnings("unused")
+    public Session session;
+    
+    @OnWebSocketMessage
     public void onMessage(String message) {
         
         _messageData = message;
@@ -62,11 +64,10 @@ public class ClothoWebSocket  implements WebSocket.OnTextMessage
         }
     }
     
-    
-    
-    @Override
-    public void onOpen(Connection connection) {
-        System.out.println("Connection has been established!\nConnection id : "+connection);
+    @OnWebSocketConnect
+    public void onOpen(Session session) {
+        this.session = session;
+        System.out.println("Connection has been established!");
         /*try {
             String helloString = "{\"channel\":\"say\",\"data\":\"Establish Connection!\",\"requestId\":1}";
             connection.sendMessage(helloString);
@@ -76,9 +77,9 @@ public class ClothoWebSocket  implements WebSocket.OnTextMessage
         }*/
     }
 
-    @Override
-    public void onClose(int i, String string) {
-        System.out.println("Connection closed.\nConnection Id : "+i+"\nClosing Message : "+string);
+    @OnWebSocketClose
+    public void onClose(int statusCode, String reason)
+    {
+        System.out.println("Connection closed.\nStatus Code: " + statusCode + "\nClosing Message : "+reason);
     }
-    
 }

@@ -8,14 +8,13 @@ package org.clothoapi.clotho3javaapi;
 
 import java.net.URI;
 import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.eclipse.jetty.websocket.WebSocket;
-import org.eclipse.jetty.websocket.WebSocketClient;
-import org.eclipse.jetty.websocket.WebSocketClientFactory;
+import org.eclipse.jetty.util.ssl.SslContextFactory;
+import org.eclipse.jetty.websocket.api.Session;
+import org.eclipse.jetty.websocket.client.WebSocketClient;
+
 
 /**
  *
@@ -23,27 +22,25 @@ import org.eclipse.jetty.websocket.WebSocketClientFactory;
  */
 @Slf4j
 public class ClothoConnection {
-    private static WebSocketClientFactory factory;
+    public WebSocketClient wsClient;
     public static ClothoWebSocket clothoSocket;
-    private Future fut;
+    private Future<Session> fut;
     
-    
-    @Getter
-    private WebSocket.Connection serverConnection; 
+    public Session session;
     
     public ClothoConnection(String clothoURI)
     {
-        factory = new WebSocketClientFactory();
         clothoSocket = new ClothoWebSocket();
         
         try {
             URI uri = new URI(clothoURI);
-            factory.start();
-            WebSocketClient wsClient = factory.newWebSocketClient();
-            wsClient.setMaxTextMessageSize(Args.maxTextSize);
-            fut = wsClient.open(uri, clothoSocket);
+            SslContextFactory factory = new SslContextFactory(true);
+            wsClient = new WebSocketClient(factory);
+            wsClient.setMaxTextMessageBufferSize(Args.maxTextSize);
+            wsClient.start();
+            fut = wsClient.connect(clothoSocket, uri);
             
-            serverConnection = (WebSocket.Connection) fut.get();
+            session = fut.get();
 //                    .get(10, TimeUnit.SECONDS);
             
         } catch (Exception ex) {
@@ -56,17 +53,17 @@ public class ClothoConnection {
     public ClothoConnection(String clothoURI, long maxTimeOut)
     {
         Args.maxTimeOut = maxTimeOut;
-        factory = new WebSocketClientFactory();
         clothoSocket = new ClothoWebSocket();
         
         try {
             URI uri = new URI(clothoURI);
-            factory.start();
-            WebSocketClient wsClient = factory.newWebSocketClient();
-            wsClient.setMaxTextMessageSize(Args.maxTextSize);
-            fut = wsClient.open(uri, clothoSocket);
+            SslContextFactory ssl = new SslContextFactory();
+            wsClient = new WebSocketClient(ssl);
+            wsClient.setMaxBinaryMessageBufferSize(Args.maxTextSize);
+            wsClient.start();
+            fut = wsClient.connect(clothoSocket, uri);
             
-            serverConnection = (WebSocket.Connection) fut.get();
+            session = fut.get();
 //                    .get(10, TimeUnit.SECONDS);
             
         } catch (Exception ex) {
@@ -80,7 +77,8 @@ public class ClothoConnection {
     {
         System.out.println("Closing Connection");
         try {
-            factory.stop();
+            session.close();
+            wsClient.stop();
         } catch (Exception ex) {
             Logger.getLogger(ClothoConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
